@@ -1,0 +1,38 @@
+# Show available commands
+default:
+    just --list
+
+# Build the project
+build:
+    cargo build
+
+# Run the application with optional parameters
+run params='':
+    cargo run -- {{ params }}
+
+# Format all Rust code
+fmt:
+    cargo fmt --all
+
+# Lint using Clippy with warnings as errors
+lint:
+    cargo clippy --all-targets --all-features -- -D warnings
+
+# Use cargo-audit to find vulnerabilities
+audit:
+    cargo audit
+
+# Run formatting, linting, audit, and vet
+ci: fmt lint audit vet
+
+# Build release binary after passing CI checks
+release: ci
+    cargo build --release
+
+# Remove build artifacts
+clean:
+    cargo clean
+
+# Bump project version (patch, minor, major)
+bump kind="patch":
+    cargo set-version --bump {{ kind }}

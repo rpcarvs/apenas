@@ -1,0 +1,30 @@
+# Show available commands
+default:
+    just --list
+
+# Install dependencies using uv
+install:
+    uv sync
+
+# Format all tracked Python files with Ruff
+fmt:
+    uv run ruff format $(git ls-files '*.py')
+
+# Lint all tracked Python files with Ruff
+lint:
+    uv run ruff check $(git ls-files '*.py')
+
+# Type-check all tracked Python files with Ty
+typecheck:
+    uv run ty check $(git ls-files '*.py') --ignore=unresolved-attribute --ignore=no-matching-overload -v
+
+# Run formatting, linting, and type checking
+ci: fmt lint typecheck
+
+# Remove environment and lockfile
+clean:
+    rm -r .venv uv.lock
+
+# Bump project version (patch, minor, major)
+bump kind="patch":
+    uv run bump-my-version bump {{ kind }}

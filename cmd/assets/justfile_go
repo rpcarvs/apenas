@@ -1,0 +1,42 @@
+default:
+    just --list
+
+# Build the project
+build:
+    go build ./...
+
+# Run the main application
+run args="":
+    go run ./cmd/app {{ args }}
+
+# Run tests
+test:
+    go test ./... -v
+
+# Run tests with coverage
+coverage:
+    go test ./... -coverprofile=coverage.out
+    go tool cover -html=coverage.out
+
+# Format code
+fmt:
+    go fmt ./...
+
+# Lint using go vet (built-in)
+lint:
+    go vet ./...
+    golangci-lint run
+
+# Update dependencies
+tidy:
+    go mod tidy
+
+ci: fmt lint tidy
+
+# Clean build artifacts
+clean:
+    rm -rf bin coverage.out
+
+# Build release binary
+release:
+    go build -o bin/app ./cmd/app
