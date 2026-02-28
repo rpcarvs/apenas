@@ -20,7 +20,7 @@ This tool runs external commands, so you need these installed:
 `menhir` can be installed to your GOPATH:
 
 ```sh
-go build .
+go install .
 ```
 
 ## Usage
